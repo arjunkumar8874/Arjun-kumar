@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+vector<int> findMaxNetworkQuality(vector<vector<int>>& towers, int radius) {
+    vector<int> maxCoordinate = {0, 0};
+    int maxQuality = 0;
+
+    for (int x = 0; x <= 50; x++) {
+        for (int y = 0; y <= 50; y++) {
+            int networkQuality = 0;
+
+            for (const auto& tower : towers) {
+                int tx = tower[0];
+                int ty = tower[1];
+                int tq = tower[2];
+
+                int distance = pow(tx - x, 2) + pow(ty - y, 2);
+
+                if (distance <= radius * radius) {
+                    int signalQuality = floor(tq / (1 + sqrt(distance)));
+                    networkQuality += signalQuality;
+                }
+            }
+
+            if (networkQuality > maxQuality) {
+                maxQuality = networkQuality;
+                maxCoordinate = {x, y};
+            }
+        }
+    }
+
+    return maxCoordinate;
+}
+
+int main() {
+    vector<vector<int>> towers = {{1, 2, 5}, {2, 1, 7}, {3, 1, 9}};
+    int radius = 2;
+
+    vector<int> maxNetworkQualityCoordinate = findMaxNetworkQuality(towers, radius);
+    cout << "[" << maxNetworkQualityCoordinate[0] << ", " << maxNetworkQualityCoordinate[1] << "]" << endl;
+
+    return 0;
+}
